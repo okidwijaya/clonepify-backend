@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-=!r)*51$ae*ef&6jaq+jw*99iz9%4+@zlmc!@$fr922@z_0dxd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'www.theforce.my.id', 'theforce.my.id']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
