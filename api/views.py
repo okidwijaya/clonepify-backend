@@ -87,7 +87,7 @@ class BlogpostListCreateView(generics.ListCreateAPIView):
         return BlogPostSerializer
     
 class BLogpostListRetrieveUpdateView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
+    queryset = Blogpost.objects.all()
     permission_classes = [AllowAny]
     
     def get_serializer_class(self):
