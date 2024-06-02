@@ -92,6 +92,11 @@ class BlogPostSerializer(serializers.ModelSerializer):
         return Blogpost.objects.create(**validated_data)
     
 
+class BlogPostListViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blogpost
+        fields = ['id', 'title', 'content', 'created_at', 'author', 'tags', 'image', 'blog']
+        
 class BlogPostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blogpost

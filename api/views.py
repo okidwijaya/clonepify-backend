@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer, ProductCreateSerializer, ProductSerializer, ProductUpdateSerializer, BlogPostUpdateSerializer, BlogpostCreateSerializer, BlogPostSerializer
+from .serializers import UserSerializer, NoteSerializer, ProductCreateSerializer, ProductSerializer, ProductUpdateSerializer, BlogPostUpdateSerializer, BlogpostCreateSerializer, BlogPostSerializer, BlogPostListViewSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Note, Product, Blogpost
 from django.http import FileResponse, HttpResponse, HttpResponseNotFound
@@ -93,4 +93,14 @@ class BLogpostListRetrieveUpdateView(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:
             return BlogPostUpdateSerializer
+        return BlogPostSerializer
+
+class BlogpostListView(generics.ListAPIView):
+    serializer_class = BlogPostSerializer
+    queryset = Blogpost.objects.all()
+    permission_classes = [AllowAny]
+    
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return BlogPostListViewSerializer
         return BlogPostSerializer
