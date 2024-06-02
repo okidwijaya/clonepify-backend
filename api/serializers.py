@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note, Collection, Vendor, Product
+from .models import Note, Collection, Vendor, Product, Blog, Blogpost
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,7 +49,7 @@ class ProductSerializer(serializers.ModelSerializer):
             vendor, _ = Vendor.objects.get_or_create(vendor=vendor_name)
             validated_data['vendor'] = vendor
         
-        return Product.objects.create(**validated_data)
+        return Blogpost.objects.create(**validated_data)
         
 class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,3 +70,40 @@ class ProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'collection', 'vendor', 'image', 'tags', 'status', 'stock', 'compare_at_price', 'margin', 'profit', 'cost', 'variant']
+        
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ['id', 'blog']
+        
+class BlogPostSerializer(serializers.ModelSerializer):
+    blog = serializers.CharField(max_length=150)
+    class Meta:
+        model = Blogpost
+        fields = ['id', 'title', 'content', 'created_at', 'author', 'tags', 'image', 'blog']
+        
+    def create(self, validated_data):
+        blog_name = validated_data.pop('blog', None)
+        
+        if blog_name:
+            blog, _ = Blog.objects.get_or_create(blog=blog_name)
+            validated_data['blog'] = blog
+        
+        return Blogpost.objects.create(**validated_data)
+    
+
+class BlogPostUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blogpost
+        fields = ['title', 'content', 'author', 'tags', 'image', 'blog']
+    
+class BlogpostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blogpost
+        exclude = ['id', 'created_at']
+        
+    def validate_blogpost(self, value):
+        if Blogpost.objects.filter(blog=value).exists():
+            raise serializers.ValidationError('Blog already exists')
+        return value
+        

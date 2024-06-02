@@ -46,3 +46,22 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Blog(models.Model):
+    blog = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.blog
+    
+class Blogpost(models.Model):
+    title = models.CharField(max_length=150)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blogauthor")
+    tags = models.CharField(max_length=1000, blank=True)
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    blog = models.CharField(null=True, blank=True, max_length=150)
+    # blog = models.ForeignKey(Blog, null=True, blank=True, on_delete=models.CASCADE, related_name="blogpost")
+    
+    def __str__(self):
+        return self.title

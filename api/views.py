@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer, ProductCreateSerializer, ProductSerializer, ProductUpdateSerializer
+from .serializers import UserSerializer, NoteSerializer, ProductCreateSerializer, ProductSerializer, ProductUpdateSerializer, BlogPostUpdateSerializer, BlogpostCreateSerializer, BlogPostSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note, Product
+from .models import Note, Product, Blogpost
 from django.http import FileResponse, HttpResponse, HttpResponseNotFound
 import os
 from django.conf import settings
@@ -76,3 +76,21 @@ def serve_image(request, image_name):
     else:
         # Return a 404 response if the file does not exist
         return HttpResponseNotFound()
+    
+class BlogpostListCreateView(generics.ListCreateAPIView):
+    queryset = Blogpost.objects.all()
+    permission_classes = [AllowAny]
+    
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return BlogpostCreateSerializer
+        return BlogPostSerializer
+    
+class BLogpostListRetrieveUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    permission_classes = [AllowAny]
+    
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return BlogPostUpdateSerializer
+        return BlogPostSerializer
